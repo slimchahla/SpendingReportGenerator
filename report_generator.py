@@ -34,7 +34,6 @@ def get_yearly_spending(year: str) -> List:
 def create_spending_report(rows: List[Tuple]):
     categories = [r[0] for r in rows]
     amounts = [r[1] for r in rows]
-    total_spending = sum(amounts)
 
     make_pie_chart(amounts, categories)
 
