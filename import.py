@@ -7,7 +7,7 @@ conn = sqlite3.connect('finances.db')
 # yyyy-mm-dd, string, float with 2 decimals
 try:
     with open('income.csv', newline='') as f:
-        reader = csv.reader(f, delimiter = ',', quotechar = '"')
+        reader = csv.reader(f, delimiter=',', quotechar='"')
         income = ((date, category, int(float(amount) * 100)) for date, category, amount in reader)
         conn.executemany('INSERT INTO income(date, category, amount) VALUES (?, ?, ?)', income)
 except FileNotFoundError:
@@ -17,7 +17,7 @@ except FileNotFoundError:
 # yyyy-mm-dd, string, float with 2 decimals
 try:
     with open('investments.csv', newline='') as f:
-        reader = csv.reader(f, delimiter = ',', quotechar = '"')
+        reader = csv.reader(f, delimiter=',', quotechar='"')
         income = ((date, category, int(float(amount) * 100)) for date, category, amount in reader)
         conn.executemany('INSERT INTO investments(date, category, amount) VALUES (?, ?, ?)', income)
 except FileNotFoundError:
@@ -27,9 +27,11 @@ except FileNotFoundError:
 # yyyy-mm-dd, string, float with 2 decimals, string, string
 try:
     with open('purchases.csv', newline='') as f:
-        reader = csv.reader(f, delimiter = ',', quotechar = '"')
-        income = ((date, card, int(float(amount) * 100), description, category) for date, card, amount, description, category in reader)
-        conn.executemany('INSERT INTO purchases(date, card, amount, description, category) VALUES (?, ?, ?, ?, ?)', income)
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        income = ((date, card, int(float(amount) * 100), description, category) for
+                  date, card, amount, description, category in reader)
+        conn.executemany('INSERT INTO purchases(date, card, amount, description, category) VALUES (?, ?, ?, ?, ?)',
+                         income)
 except FileNotFoundError:
     pass
 
