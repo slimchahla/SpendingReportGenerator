@@ -4,7 +4,7 @@ import sqlite3
 conn = sqlite3.connect('finances.db')
 
 # date, category, amount
-# yyyy-mm-dd, string, float with 2 decimals
+# yyyy-mm-dd, int, int
 try:
     with open('income.csv', newline='') as f:
         reader = csv.reader(f, delimiter=',', quotechar='"')
@@ -14,7 +14,7 @@ except FileNotFoundError:
     pass
 
 # date, category, amount
-# yyyy-mm-dd, string, float with 2 decimals
+# yyyy-mm-dd, int, int
 try:
     with open('investments.csv', newline='') as f:
         reader = csv.reader(f, delimiter=',', quotechar='"')
@@ -24,7 +24,7 @@ except FileNotFoundError:
     pass
 
 # date, card, amount, description category
-# yyyy-mm-dd, string, float with 2 decimals, string, string
+# yyyy-mm-dd, string, int, string, int
 try:
     with open('purchases.csv', newline='') as f:
         reader = csv.reader(f, delimiter=',', quotechar='"')

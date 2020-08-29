@@ -26,13 +26,17 @@ def get_monthly_categories(year: str, month: str) -> List[str]:
 
 def get_monthly_spending(year: str, month: str):
     month_num = MONTHS.index(month) + 1
-    query = 'SELECT category, SUM(amount)/100 FROM purchases WHERE date LIKE ? GROUP BY category ORDER BY category'
+    query = '''SELECT categories.name, sum(purchases.amount)/100 
+               FROM purchases JOIN categories ON purchases.category = categories.id
+               WHERE date LIKE ? GROUP BY category ORDER BY category'''
     rows = [r for r in conn.execute(query, (f'{year}-{month_num:02d}-%',))]
     create_spending_report(rows)
 
 
 def get_yearly_spending(year: str):
-    query = 'SELECT category, SUM(amount)/100 FROM purchases WHERE date LIKE ? GROUP BY category ORDER BY category'
+    query = '''SELECT categories.name, sum(purchases.amount)/100 
+               FROM purchases JOIN categories ON purchases.category = categories.id
+               WHERE date LIKE ? GROUP BY category ORDER BY category'''
     rows = [r for r in conn.execute(query, (f'{year}-%',))]
     create_spending_report(rows)
 

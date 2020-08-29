@@ -1,4 +1,17 @@
-CREATE TABLE income(id integer primary key AUTOINCREMENT, date text not NULL, category text not null, amount INT not null);
-CREATE TABLE investments(id integer primary key AUTOINCREMENT, date text not NULL, category text not null, amount INT not null);
-CREATE TABLE purchases(id integer primary key AUTOINCREMENT, date text not NULL, card text not null, amount int not null, description text not null, category text not null);
+CREATE TABLE transaction_types(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);
 
+CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type INT NOT NULL,
+                        FOREIGN KEY (type) REFERENCES transaction_types (id));
+
+CREATE TABLE payment_method(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);
+
+CREATE TABLE income(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, category INTEGER NOT NULL,
+                    amount INT NOT NULL, FOREIGN KEY (category) REFERENCES categories (id));
+
+CREATE TABLE investments(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, category TEXT NOT NULL,
+                         amount INT NOT NULL, FOREIGN KEY (category) REFERENCES categories (id));
+
+CREATE TABLE purchases(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, method INTEGER NOT NULL,
+                       amount INT NOT NULL, description TEXT NOT NULL, category INT NOT NULL,
+                       FOREIGN KEY (method) REFERENCES payment_method (id),
+                       FOREIGN KEY (category) REFERENCES categories (id));
