@@ -18,12 +18,6 @@ def get_current_month() -> str:
     return datetime.datetime.now().strftime('%B')
 
 
-def get_monthly_categories(year: str, month: str) -> List[str]:
-    month_num = MONTHS.index(month) + 1
-    query = 'SELECT DISTINCT category FROM purchases WHERE date LIKE ? ORDER BY category'
-    return [r[0] for r in conn.execute(query, (f'{year}-{month_num:02d}-%',))]
-
-
 def get_monthly_spending(year: str, month: str):
     month_num = MONTHS.index(month) + 1
     query = '''SELECT categories.name, sum(purchases.amount)/100 
