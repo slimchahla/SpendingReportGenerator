@@ -30,7 +30,7 @@ try:
         reader = csv.reader(f, delimiter=',', quotechar='"')
         income = ((date, card, int(float(amount) * 100), description, category) for
                   date, card, amount, description, category in reader)
-        conn.executemany('INSERT INTO purchases(date, card, amount, description, category) VALUES (?, ?, ?, ?, ?)',
+        conn.executemany('INSERT INTO purchases(date, method, amount, description, category) VALUES (?, ?, ?, ?, ?)',
                          income)
 except FileNotFoundError:
     pass

@@ -1,25 +1,12 @@
-from typing import List
+import finance_databse
 import PySimpleGUI as sg
 import datetime
-import sqlite3
 import re
 
 MONTHS = ('January', 'February', 'March', 'April', 'May', 'June',
           'July', 'August', 'September', 'October', 'November', 'December')
 
-conn = sqlite3.connect('finances.db')
-
-
-def get_categories(table: str) -> List[str]:
-    cats = [r[0] for r in conn.execute('SELECT DISTINCT category FROM ? ORDER BY category', (table,))]
-    cats.append('NEW CATEGORY')
-    return cats
-
-
-def get_cards() -> List[str]:
-    cards = [r[0] for r in conn.execute('SELECT DISTINCT card FROM purchases ORDER BY card')]
-    cards.append('NEW CARD')
-    return cards
+db = finance_databse.Database()
 
 
 def get_current_date() -> str:
@@ -31,7 +18,7 @@ def check_date_format(date: str) -> bool:
 
 
 purchase_layout = [[sg.Text('Date'), sg.InputText(get_current_date())],
-                   [sg.Text('Card'), sg.Combo(get_cards(), key='purchase_card')],
+                   [sg.Text('Payment Method'), sg.Combo(db.get_payment_methods(), key='purchase_card')],
                    [sg.Text('Amount'), ]]
 
 main_layout = [[sg.Radio('Purchase', 'GROUP1', default=True, enable_events=True, key='radio_purchase'),

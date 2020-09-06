@@ -1,13 +1,10 @@
 from typing import List, Tuple
+from finance_databse import Database, MONTHS
 import matplotlib.pyplot as plt
 import PySimpleGUI as sg
 import datetime
-import sqlite3
 
-MONTHS = ('January', 'February', 'March', 'April', 'May', 'June',
-          'July', 'August', 'September', 'October', 'November', 'December')
-
-conn = sqlite3.connect('finances.db')
+db = Database()
 
 
 def get_current_year() -> str:
@@ -16,23 +13,6 @@ def get_current_year() -> str:
 
 def get_current_month() -> str:
     return datetime.datetime.now().strftime('%B')
-
-
-def get_monthly_spending(year: str, month: str):
-    month_num = MONTHS.index(month) + 1
-    query = '''SELECT categories.name, sum(purchases.amount)/100 
-               FROM purchases JOIN categories ON purchases.category = categories.id
-               WHERE date LIKE ? GROUP BY category ORDER BY category'''
-    rows = [r for r in conn.execute(query, (f'{year}-{month_num:02d}-%',))]
-    create_spending_report(rows)
-
-
-def get_yearly_spending(year: str):
-    query = '''SELECT categories.name, sum(purchases.amount)/100 
-               FROM purchases JOIN categories ON purchases.category = categories.id
-               WHERE date LIKE ? GROUP BY category ORDER BY category'''
-    rows = [r for r in conn.execute(query, (f'{year}-%',))]
-    create_spending_report(rows)
 
 
 def create_spending_report(rows: List[Tuple]):
@@ -65,9 +45,9 @@ window = sg.Window('Finances', layout)
 while True:
     event, values = window.read()
     if event == 'generate_monthly':
-        get_monthly_spending(values['year'], values['month'])
+        create_spending_report(db.get_monthly_spending(values['year'], values['month']))
     elif event == 'generate_yearly':
-        get_yearly_spending(values['year'])
+        create_spending_report(db.get_yearly_spending(values['year']))
     elif event == sg.WIN_CLOSED:
         break
 
